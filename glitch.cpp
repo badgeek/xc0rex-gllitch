@@ -31,6 +31,8 @@ int main(int argc, char* argv[])
 	glitchstart = atoi(argv[3]);
 	glitchamount = atoi(argv[4]);
 	
+	int rndval = atoi(argv[5]);
+	
 	if (argv[5])
 	{
 		glitchrandomness = atoi(argv[5]);	
@@ -58,7 +60,7 @@ int main(int argc, char* argv[])
 			if (i >= glitchstart && i <= glitchamount)
 			{
 				//byte = original.get();
-				output.put(random() % 99);
+				output.put(random() % rndval);
 				//cout << byte;
 			}else{
 				byte = original.get();
