@@ -8,8 +8,10 @@ using std::cerr;
 #include <fstream>
 using std::fstream;
 
+#include <time.h>
+
 int length, start, stop;
-int glitchstart, glitchamount, glitchrandomness;
+int glitchstart, glitchamount, glitchrandomness, glitchprob;
 
 char byte;
 int rnd;
@@ -24,20 +26,20 @@ int main(int argc, char* argv[])
 	
 	if (!argv[1] || !argv[2] || !argv[3] || !argv[4])
 	{
-		cout << "usage ./glitch <input> <output> <start> <amount> <optional: randomness>\n\n";
+		//						   1       2        3              4                      5
+		cout << "usage ./glitch <input> <output> <start> <optional: randomness> <optional: probability> \n\n";
 		return -1;
 	}
 	
 	glitchstart = atoi(argv[3]);
-	glitchamount = atoi(argv[4]);
 	
-	int rndval = atoi(argv[5]);
+	int rndval = atoi(argv[4]);
 	
 	if (argv[5])
 	{
-		glitchrandomness = atoi(argv[5]);	
+		glitchprob = atoi(argv[5]);	
 	}else{
-		glitchrandomness = 99;	
+		glitchprob = 500;	
 	}
 	
 	fstream original(argv[1], ios::in | ios::out | ios::binary);
@@ -54,21 +56,39 @@ int main(int argc, char* argv[])
 		stop = length - 1000;
 		original.seekg (0, ios::beg);
 		
+		int chunk;
+		int glitchcount;
+		int bytecount;
 		
 		for (int i = 0; i < length; i++)
 		{
-			if (i >= glitchstart && i <= glitchamount)
+			
+			byte = original.get();
+			
+			if (i >= glitchstart && i <= (length - 1000))
 			{
-				//byte = original.get();
-				output.put(random() % rndval);
-				//cout << byte;
+				bytecount = bytecount + 1;
+				srand ( time(NULL) );
+				if ((random() % 100000) < glitchprob)
+				{
+					glitchcount = glitchcount + 1;
+					
+					output.put(random() % rndval);
+				}else{
+					//cout << "real data\n";
+					output.put(byte);
+				}
+				//output.put(byte);
 			}else{
-				byte = original.get();
+				//cout << "real data\n";
 				output.put(byte);
 			}
+			
+			
+			//output.put(byte);
 
 		}
-
+cout << "glitch count: " << glitchcount << " bytes: " << bytecount << "\n";
 
 	}
 	
