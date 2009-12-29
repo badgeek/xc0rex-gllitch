@@ -22,24 +22,24 @@ int main(int argc, char* argv[])
 	cout << "iyok@deadmediafm.org\n";
 	
 	
-	if (!argv[1] || !argv[2] || !argv[3])
+	if (!argv[1] || !argv[2] || !argv[3] || !argv[4])
 	{
-		cout << "usage ./glitch <input> <start> <amount> <optional: randomness>\n\n";
+		cout << "usage ./glitch <input> <output> <start> <amount> <optional: randomness>\n\n";
 		return -1;
 	}
 	
-	glitchstart = atoi(argv[2]);
-	glitchamount = atoi(argv[3]);
+	glitchstart = atoi(argv[3]);
+	glitchamount = atoi(argv[4]);
 	
-	if (argv[3])
+	if (argv[5])
 	{
-		glitchrandomness = atoi(argv[3]);	
+		glitchrandomness = atoi(argv[5]);	
 	}else{
 		glitchrandomness = 99;	
 	}
 	
 	fstream original(argv[1], ios::in | ios::out | ios::binary);
-	fstream output("out.jpg",ios::out | ios::binary);
+	fstream output(argv[2],ios::out | ios::binary);
 
 	if (!original)
 	{
